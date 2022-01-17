@@ -1,7 +1,7 @@
 <?php
 
-    $input = explode( "\n", file_get_contents( 'input' ) );
-//    $input = explode( "\n", file_get_contents( 'input.simple' ) );
+    $input = explode( "\n", file_get_contents( 'input' ) ?: '' );
+    $input = explode( "\n", file_get_contents( 'input.simple' ) ?: '' );
     $input = array_map( static fn( $i ) => (int) $i, $input );
 
     $incrementCount = 0;
@@ -18,11 +18,11 @@
         $currentSlice = array_sum( array_slice( $input, $i - 2, 3 ) );
         $prevSlice    = array_sum( array_slice( $input, $i - 3, 3 ) );
 
-        $slidingCount += $currentSlice > $prevSlice  ? 1 : 0;
+        $slidingCount += $currentSlice > $prevSlice ? 1 : 0;
     }
 
     var_dump( [
         'simple increments' => $incrementCount,
-        'sliding window' =>  $slidingCount,
+        'sliding window'    => $slidingCount,
     ] );
 

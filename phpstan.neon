@@ -1,0 +1,10 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+
+  level: 9
+  phpVersion: 80100
+
+  paths:
+    - 2021/
