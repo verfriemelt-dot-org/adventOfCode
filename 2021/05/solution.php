@@ -94,16 +94,13 @@
 
         public array $lines = [];
 
-        private Point $topLeft;
-
         private Point $bottomRight;
 
         public function __construct() {
-            $this->topLeft     = new Point( 0, 0 );
             $this->bottomRight = new Point( 0, 0 );
         }
 
-        public function addLine( Line $line ) {
+        public function addLine( Line $line ): void {
             $this->lines[] = $line;
 
             $this->bottomRight->x = max( $this->bottomRight->x, $line->from->x, $line->to->x );
