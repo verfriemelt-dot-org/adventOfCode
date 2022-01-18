@@ -1,5 +1,6 @@
 includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
 
@@ -10,3 +11,6 @@ parameters:
 
   paths:
     - 2021/
+
+  ignoreErrors:
+    - '#^Short ternary operator is not allowed#'

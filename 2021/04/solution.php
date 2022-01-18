@@ -16,7 +16,7 @@
 
             $result = [];
 
-            if ( !preg_match_all( '~([0-9]+)~', $input, $result ) ) {
+            if ( preg_match_all( '~([0-9]+)~', $input, $result ) !== false ) {
                 throw new RuntimeException( 'illegal input' );
             }
 
@@ -60,7 +60,7 @@
                     $line[] = $this->marked[$offset];
                 }
 
-                if ( (int) count( array_filter( $line ) ) === $step ) {
+                if ( count( array_filter( $line ) ) === $step ) {
                     return true;
                 }
             }

@@ -3,6 +3,7 @@
     declare( strict_types = 1 );
 
     $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
+
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
     class Point {
@@ -71,16 +72,20 @@
          */
         private function getOrthogonalPoints(): array {
 
-            $direction = $this->from->x == $this->to->x ? "y" : "x";
+            $direction = $this->from->x === $this->to->x ? "y" : "x";
 
             $points = [ $this->from, $this->to ];
 
             for (
+                /** @phpstan-ignore-next-line */
                 $step = min( $this->from->{$direction}, $this->to->{$direction} ) + 1;
+                /** @phpstan-ignore-next-line */
                 $step < max( $this->from->{$direction}, $this->to->{$direction} );
                 $step++
             ) {
                 $point               = new Point( $this->from->x, $this->from->y );
+
+                /** @phpstan-ignore-next-line */
                 $point->{$direction} = $step;
                 $points[]            = $point;
             }
