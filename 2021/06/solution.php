@@ -5,31 +5,34 @@
     $input = explode( ",", file_get_contents( __DIR__ . '/input' ) ?: '' );
 //    $input = explode( ",", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
-    $fish = array_map( fn(string $i ): int => (int ) $i, $input );
+    $fish = array_map( fn( string $i ): int => (int) $i, $input );
 
     $day = 0;
 
+    print_r( [ 'day' => 'initial', "fish" => implode( ', ', $fish ) ] );
+    $timer = array_fill( 0, 9, 0 );
 
-    print_r( ['day' => 'initial', "fish" => implode(', ', $fish)  ]);
+    foreach( $input as $i ) {
+        $timer[$i]++;
+    }
 
-    while( ++$day <= 80  ) {
+    while ( ++$day <= 256 ) {
 
-        $newCount = count(array_filter($fish, fn ( int $i) => $i === 0 ));
+        // fetch zeros
+        $zeros = array_shift( $timer );
 
+        // add them to reset value
+        $timer[6] += $zeros;
 
-        $fish = array_map( fn(int $i):int => $i === 0 ? 6 : --$i, $fish);
-        $fish = [
-            ... $fish,
-            ... array_fill(0, $newCount, 8),
+        // add amount of new zeros as eights
+        $timer = [
+            ... $timer,
+            $zeros
         ];
-        print_r([
-            "dayt" => $day,
-            "fish" => implode(', ', $fish),
-            "fishCount" => count($fish),
-            "newCount" => $newCount,
 
-        ]);
-
-
-
+        print_r( [
+            "day"       => $day,
+            "fishCount" => array_sum( $timer ),
+            "timer"     => $timer,
+        ] );
     }
