@@ -1,5 +1,11 @@
 <?php
 
+    declare( strict_types = 1 );
+
+    namespace year2021\day4;
+
+    use \RuntimeException;
+
     [$numbers, $fields] = explode( "\n\n", file_get_contents( __DIR__ . '/input' ) ?: '', 2 );
 //    [$numbers, $fields] = explode( "\n\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '', 2 );
 
@@ -8,8 +14,14 @@
 
     class Bingo {
 
+        /**
+         * @var int[]
+         */
         private array $field;
 
+        /**
+         * @var bool[]
+         */
         private array $marked;
 
         public function __construct( string $input ) {
@@ -81,16 +93,16 @@
 
         public function print(): void {
 
-            $step = 5;
+            $step  = 5;
             $count = 1;
-            foreach( $this->field as $index => $number ) {
+            foreach ( $this->field as $index => $number ) {
 
-                if ( $this->marked[$index ]  ) {
+                if ( $this->marked[$index] ) {
                     echo "\033[31m";
                 } else {
                     echo "\033[37m";
                 }
-                echo str_pad( $number, 3, ' ', STR_PAD_LEFT);
+                echo str_pad( (string)$number, 3, ' ', STR_PAD_LEFT );
                 echo "\033[0m";
                 if ( $count % $step === 0 ) {
                     echo PHP_EOL;
@@ -99,6 +111,7 @@
                 $count++;
             }
         }
+
     }
 
     $bingos = [];
@@ -127,8 +140,7 @@
 
                 // remove board
                 unset( $bingos[$index] );
-                print_r(['board_count' => count( $bingos )]);
-
+                print_r( [ 'board_count' => count( $bingos ) ] );
             }
         }
     }

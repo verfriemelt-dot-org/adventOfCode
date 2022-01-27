@@ -1,5 +1,9 @@
 <?php
 
+    declare( strict_types = 1 );
+
+    namespace year2021\day2;
+
     $input = explode( "\n", file_get_contents( 'input' ) ?: '' );
 //    $input = explode( "\n", file_get_contents( 'input.simple' ) ?: '' );
 

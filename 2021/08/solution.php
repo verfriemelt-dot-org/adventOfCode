@@ -2,6 +2,8 @@
 
     declare( strict_types = 1 );
 
+    namespace year2021\day8;
+
     $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );

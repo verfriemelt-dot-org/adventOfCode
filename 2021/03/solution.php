@@ -1,5 +1,9 @@
 <?php
 
+    declare( strict_types = 1 );
+
+    namespace year2021\day3;
+
     $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
@@ -13,6 +17,11 @@
         'co2' => '',
     ];
 
+    /**
+     * @param array<string> $input
+     * @param int $number
+     * @return string
+     */
     function getBitsAtOffset( array $input, int $number ): string {
         return array_reduce( $input, static fn( string $r, string $i ) => $r . $i[$number], '' );
     }
@@ -78,5 +87,5 @@
         'o2 dec'       => bindec( current( $filterList['o2'] ) ?: ''  ),
         'co2'          => current( $filterList['co2'] ),
         'co2 dec'      => bindec( current( $filterList['co2'] ) ?: ''  ),
-        'life support' => bindec( current( $filterList['co2'] ) ?: ''  ) * bindec( current( $filterList['o2'] ) ?: '' ),
+        'life support' => bindec( current( $filterList['co2'] ) ?: ''  ) * bindec( current( $filterList['o2'] ) ?: ''  ),
     ] );

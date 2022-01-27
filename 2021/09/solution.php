@@ -2,6 +2,8 @@
 
     declare( strict_types = 1 );
 
+    namespace year2021\day9;
+
     $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
@@ -33,7 +35,7 @@
         private int $maxX;
 
         /**
-         *
+         * 
          * @param string[] $input
          */
         public function __construct( array $input ) {

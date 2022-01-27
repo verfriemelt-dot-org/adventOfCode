@@ -2,7 +2,9 @@
 
     declare( strict_types = 1 );
 
-    $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
+    namespace year2021\day5;
+
+$input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
@@ -83,7 +85,7 @@
                 $step < max( $this->from->{$direction}, $this->to->{$direction} );
                 $step++
             ) {
-                $point               = new Point( $this->from->x, $this->from->y );
+                $point = new Point( $this->from->x, $this->from->y );
 
                 /** @phpstan-ignore-next-line */
                 $point->{$direction} = $step;
@@ -97,6 +99,9 @@
 
     class Plane {
 
+        /**
+         * @var Line[]
+         */
         public array $lines = [];
 
         private Point $bottomRight;
@@ -112,6 +117,9 @@
             $this->bottomRight->y = max( $this->bottomRight->y, $line->from->y, $line->to->y );
         }
 
+        /**
+         * @return array<int, array<int, int>>
+         */
         public function getCounts(): array {
             $count = array_fill( 0, $this->bottomRight->x + 1, array_fill( 0, $this->bottomRight->y + 1, 0 ) );
 
