@@ -5,13 +5,52 @@
     $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
+    class Point {
+
+        public int $x;
+
+        public int $y;
+
+        public int $value;
+
+        public bool $visited = false;
+
+        public function __construct( int $x, int $y, int $value ) {
+            $this->x     = $x;
+            $this->y     = $y;
+            $this->value = $value;
+        }
+
+    }
+
     class Map {
 
-        private array $map = [];
+        /**
+         * @var Point[]
+         */
+        private array $points = [];
 
+        private int $maxX;
+
+        /**
+         *
+         * @param string[] $input
+         */
         public function __construct( array $input ) {
+
+            $x = 0;
+            $y = 0;
+
             foreach ( $input as $line ) {
-                $this->map[] = array_map( fn( string $i ): int => (int) $i, str_split( $line ) );
+                $this->maxX   = strlen( $line );
+                $x            = 0;
+                $this->points = [
+                    ... $this->points,
+                    ... array_map( function ( string $value ) use ( &$x, $y ): Point {
+                        return (new Point( $x++, $y, (int) $value ) );
+                    }, str_split( $line ) )
+                ];
+                $y++;
             }
         }
 
@@ -19,45 +58,126 @@
 
             $risk = 0;
 
-            for ( $y = 0; $y < count( $this->map ); $y++ ) {
-                for ( $x = 0; $x < count( $this->map[$y] ); $x++ ) {
-
-                    $value = $this->getValue( $x, $y );
-
-                    if ( !$this->isLowPoint( $x, $y ) || $value === null ) {
-                        continue;
-                    }
-
-                    $risk += $value + 1;
-                }
+            foreach ( $this->getLowPoints() as $point ) {
+                $risk += $point->value + 1;
             }
 
             return $risk;
         }
 
-        public function getValue( int $x, int $y ): ?int {
-            return $this->map[$y][$x] ?? null;
+        /**
+         *
+         * @return Point[]
+         */
+        public function getLowPoints(): array {
+
+            $points = [];
+
+            foreach ( $this->points as $point ) {
+
+                if ( !$this->isLowPoint( $point ) ) {
+                    continue;
+                }
+
+                $points[] = $point;
+            }
+
+            return $points;
         }
 
-        public function isLowPoint( int $x, int $y ): bool {
+        public function getPoint( int $x, int $y ): ?Point {
 
+            $offset = $this->maxX * $y + $x;
+            $point  = $this->points[$offset] ?? null;
 
-            $value          = $this->getValue( $x, $y );
-            $adjacentValues = [];
+            if ( $point === null ) {
+                return null;
+            }
 
-            $adjacentValues[] = $this->getValue( $x - 1, $y );
-            $adjacentValues[] = $this->getValue( $x, $y - 1 );
-            $adjacentValues[] = $this->getValue( $x, $y + 1 );
-            $adjacentValues[] = $this->getValue( $x + 1, $y );
+            if ( $point->x !== $x || $point->y !== $y ) {
+                return null;
+            }
 
-            return $value < min( ... array_filter( $adjacentValues, fn( null | int $i ): bool => !is_null( $i ) ) );
+            return $point;
+        }
+
+        /**
+         *
+         * @param Point $point
+         * @return Point[]
+         */
+        public function getNeighbouringPoints( Point $point ): array {
+
+            return array_filter( [
+                $this->getPoint( $point->x + 1, $point->y + 0 ),
+                $this->getPoint( $point->x + 0, $point->y + 1 ),
+                $this->getPoint( $point->x - 1, $point->y - 0 ),
+                $this->getPoint( $point->x - 0, $point->y - 1 ),
+                ] );
+        }
+
+        public function isLowPoint( Point $point ): bool {
+
+            $adjacentValues = array_map( static fn( Point $p ): int => $p->value, $this->getNeighbouringPoints( $point ) );
+
+            return $point->value < min( ... $adjacentValues );
+        }
+
+        /**
+         * @return array<array{'lowpoint': Point, 'size': int }>
+         */
+        public function getBasins(): array {
+
+            $basins = [];
+
+            foreach ( $this->getLowPoints() as $lowPoint ) {
+
+                $points    = [];
+                $newPoints = [ $lowPoint ];
+
+                while ( count( $newPoints ) > 0 ) {
+
+                    $new = [];
+
+                    foreach ( $newPoints as $point ) {
+
+                        if ( $point->visited ) {
+                            continue;
+                        }
+
+                        $point->visited = true;
+                        $points[]   = $point;
+                        $new        = [
+                            ... $new,
+                            ... array_filter( $this->getNeighbouringPoints( $point ), static fn( Point $p ) => $p->value !== 9 && !$p->visited ) ];
+                    }
+
+                    $newPoints = $new;
+                }
+
+                $basins[] = [
+                    'lowpoint' => $lowPoint,
+                    'size'     => count( $points ),
+//                    'points' => array_map(fn(Point $p): array => [$p->x,$p->y, $p->value], $points),
+                ];
+            }
+
+            return $basins;
         }
 
     }
 
-    $map = new Map( $input );
+    $start = microtime( true );
+
+    $map    = new Map( $input );
+    $basins = $map->getBasins();
+
+    usort( $basins, fn( array $a, array $b ) => $b['size'] <=> $a['size'] );
 
     print_r( [
-        "risk" => $map->getLowPointsRisk()
+        "risk"             => $map->getLowPointsRisk(),
+        "time"             => microtime( true ) - $start,
+//        "basins" => $map->getBasins(),
+        "multipliedBasins" => array_reduce( array_slice( $basins, 0, 3 ), fn( int $carry, array $input ) => $carry * $input['size'], 1 )
     ] );
 

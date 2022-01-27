@@ -7,8 +7,6 @@ parameters:
   level: 9
   phpVersion: 80100
 
-  checkMissingIterableValueType: false
-
   paths:
     - 2021/
 
