@@ -5,6 +5,7 @@
     namespace year2021\day11;
 
 $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
+
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
     class Point {
@@ -91,7 +92,7 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
                 ] );
         }
 
-        public function print() {
+        public function print(): void {
 
             $x = 0;
             foreach ( $this->points as $p ) {
@@ -141,19 +142,19 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
     $map = new Map( $input );
 
-    $c = 0;
-    $sync=0;
+    $c    = 0;
+    $sync = 0;
 
-    for( $i = 0; $i<10000;$i++) {
+    for ( $i = 0; $i < 10000; $i++ ) {
 
         $flashes = $map->step();
 
-        if ( $i<100) {
-            $c+=$flashes;
+        if ( $i < 100 ) {
+            $c += $flashes;
         }
 
-        if ($flashes === 100 ) {
-            $sync = $i+1;
+        if ( $flashes === 100 ) {
+            $sync = $i + 1;
             break;
         }
     }
@@ -161,8 +162,8 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
 
     print_r( [
-        "time" => microtime( true ) - $start,
-        "count" => $c,
+        "time"    => microtime( true ) - $start,
+        "count"   => $c,
         "syncedt" => $sync
     ] );
 
