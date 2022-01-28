@@ -18,11 +18,13 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
         "}" => 0,
         ">" => 0,
     ];
+    $scores = [];
 
     foreach ( $input as $line ) {
 
         $pos   = 0;
         $stack = [];
+        $error = false;
 
         foreach ( str_split( $line ) as $chr ) {
 
@@ -38,8 +40,9 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
                 if ( !$isValid ) {
                     $counts[$chr]++;
+                    $error = true;
 //                    throw new \RuntimeException("illegal at {$pos}: {$chr} => {$popped}");
-                    continue 2;
+                    break;
                 }
             } else {
                 $stack[] = $chr;
@@ -47,12 +50,37 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
             $pos++;
         }
+
+        if ( !$error ) {
+            echo $line . PHP_EOL;
+
+            $fixup    = implode( '', $stack );
+            $fixup    = str_replace( [ '(', "[", "{", "<" ], [ ")", "]", "}", ">" ], $fixup );
+            $fixup    = strrev( $fixup );
+            $fixScore = 0;
+
+            foreach ( str_split( $fixup ) as $chr ) {
+                $fixScore *= 5;
+                $fixScore += match ( $chr ) {
+                    ")" => 1,
+                    "]" => 2,
+                    "}" => 3,
+                    ">" => 4,
+                    default => throw new \RuntimeException( 'wut? ' )
+                };
+            }
+
+            $scores[] = $fixScore;
+        }
     }
 
     $score = $counts[")"] * 3 + $counts["]"] * 57 + $counts["}"] * 1197 + $counts[">"] * 25137;
 
+    sort( $scores );
+
     print_r( [
         "time"   => microtime( true ) - $start,
         "score"  => $score,
+        "scores" => $scores[floor( count( $scores ) / 2 )],
         "counts" => $counts
     ] );
