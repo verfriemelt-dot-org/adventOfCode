@@ -52,7 +52,6 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
         }
 
         if ( !$error ) {
-            echo $line . PHP_EOL;
 
             $fixup    = implode( '', $stack );
             $fixup    = str_replace( [ '(', "[", "{", "<" ], [ ")", "]", "}", ">" ], $fixup );
