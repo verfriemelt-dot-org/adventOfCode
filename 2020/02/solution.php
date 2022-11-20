@@ -2,10 +2,7 @@
 
     declare( strict_types = 1 );
 
-    namespace year2020\day1;
-
-    use function print_r;
-    use function str_word_count;
+    namespace year2020\day2;
 
     return static function ( string $input): array {
 
