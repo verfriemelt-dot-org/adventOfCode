@@ -80,6 +80,7 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
     print_r( [
         "time"   => microtime( true ) - $start,
         "score"  => $score,
+        /** @phpstan-ignore-next-line */
         "scores" => $scores[floor( count( $scores ) / 2 )],
         "counts" => $counts
     ] );

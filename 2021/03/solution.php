@@ -33,6 +33,7 @@
 
     for ( $i = 0; $i < strlen( $input[0] ); $i++ ) {
 
+        /** @phpstan-ignore-next-line */
         $histogram = array_filter( array_count_values( str_split( getBitsAtOffset( $input, $i ) ) ) );
         asort( $histogram );
 
@@ -46,6 +47,7 @@
     $iteration = 0;
     while ( count( $filterList['o2'] ) > 1 ) {
 
+        /** @phpstan-ignore-next-line */
         $histogram = array_filter( array_count_values( str_split( getBitsAtOffset( $filterList['o2'], $iteration ) ) ) );
         asort( $histogram );
 
@@ -59,6 +61,7 @@
     $iteration = 0;
     while ( count( $filterList['co2'] ) > 1 ) {
 
+        /** @phpstan-ignore-next-line */
         $histogram = array_filter( array_count_values( str_split( getBitsAtOffset( $filterList['co2'], $iteration ) ) ) );
         asort( $histogram );
 

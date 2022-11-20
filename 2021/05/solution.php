@@ -54,7 +54,7 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
          * @return Point[]
          */
         private function getDiagonalPoints(): array {
-            $direction = $this->from->x == $this->to->x ? "y" : "x";
+            $direction = $this->from->x === $this->to->x ? "y" : "x";
 
             $x = range( $this->from->x, $this->to->x );
             $y = range( $this->from->y, $this->to->y );
