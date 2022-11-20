@@ -32,7 +32,6 @@ class Test
     {
         static::assertFileExists( "{$path}/" . static::SOLUTION_FILE, 'solution file must be exsting' );
 
-
         $callable = require_once "{$path}/" . static::SOLUTION_FILE;
 
         if ( !is_callable($callable)) {
@@ -43,18 +42,21 @@ class Test
 
         foreach(['simple','full'] as $complexity) {
 
-            static::assertFileExists( "{$path}/input.{$complexity}", 'input file must be exsting' );
-
-            $input = trim(file_get_contents( "{$path}/input.{$complexity}"));
-            static::assertIsString($input);
-
-            $result = $callable($input);
-
-            static::assertIsArray($result);
-            static::assertArrayHasKey('part1', $result);
-            static::assertArrayHasKey('part2', $result);
-
             foreach( ['part1', 'part2'] as $part ) {
+
+                if ( file_exists("{$path}/input.{$part}.{$complexity}") ) {
+                    $input = trim(file_get_contents("{$path}/input.{$part}.{$complexity}"));
+                } else {
+                    static::assertFileExists( "{$path}/input.{$complexity}", 'input file must be exsting' );
+                    $input = trim(file_get_contents( "{$path}/input.{$complexity}"));
+                }
+
+                static::assertIsString($input);
+                $result = $callable($input);
+
+                static::assertIsArray($result);
+                static::assertArrayHasKey('part1', $result);
+                static::assertArrayHasKey('part2', $result);
 
                 $output = file_get_contents( "{$path}/solution.{$part}.$complexity" );
 
