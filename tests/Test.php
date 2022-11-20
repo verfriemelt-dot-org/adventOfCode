@@ -12,13 +12,13 @@ class Test
     private function finder(): Generator
     {
 
-        foreach ( glob( __DIR__ . '/../2021/*' ) as $path ) {
+        foreach ( glob( __DIR__ . '/../202*/*' ) as $path ) {
 
             if ( str_starts_with( '.', $path ) ) {
                 continue;
             }
 
-            $year = '2021';
+            $year = basename(dirname($path));
             $day = basename( $path );
 
             yield sprintf( "%s.%s", $year, $day ) => [ 'path' => $path ];
@@ -45,7 +45,7 @@ class Test
 
             static::assertFileExists( "{$path}/input.{$complexity}", 'input file must be exsting' );
 
-            $input = file_get_contents( "{$path}/input.{$complexity}");
+            $input = trim(file_get_contents( "{$path}/input.{$complexity}"));
             static::assertIsString($input);
 
             $result = $callable($input);
