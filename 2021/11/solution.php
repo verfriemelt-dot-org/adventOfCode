@@ -4,7 +4,10 @@
 
     namespace year2021\day11;
 
-$input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
+    return;
+
+    /** @phpstan-ignore-next-line */
+    $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 

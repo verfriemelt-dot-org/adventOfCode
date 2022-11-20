@@ -4,29 +4,32 @@
 
     namespace year2021\day1;
 
-    $input = explode( "\n", file_get_contents( 'input' ) ?: '' );
-    $input = explode( "\n", file_get_contents( 'input.simple' ) ?: '' );
-    $input = array_map( static fn( $i ) => (int) $i, $input );
+    return static function (string $input): array {
 
-    $incrementCount = 0;
-    $slidingCount   = 0;
+        $input = explode( "\n", $input);
+        $input = array_map( static fn( $i ) => (int) $i, $input );
 
-    for ( $i = 1; $i < count( $input ); $i++ ) {
+        $incrementCount = 0;
+        $slidingCount   = 0;
 
-        $incrementCount += $input[$i] > $input[$i - 1] ? 1 : 0;
+        for ( $i = 1; $i < count( $input ); $i++ ) {
 
-        if ( $i < 3 ) {
-            continue;
+            $incrementCount += $input[$i] > $input[$i - 1] ? 1 : 0;
+
+            if ( $i < 3 ) {
+                continue;
+            }
+
+            $currentSlice = array_sum( array_slice( $input, $i - 2, 3 ) );
+            $prevSlice    = array_sum( array_slice( $input, $i - 3, 3 ) );
+
+            $slidingCount += $currentSlice > $prevSlice ? 1 : 0;
         }
 
-        $currentSlice = array_sum( array_slice( $input, $i - 2, 3 ) );
-        $prevSlice    = array_sum( array_slice( $input, $i - 3, 3 ) );
+        return [
+            'part1' => $incrementCount,
+            'part2' => $slidingCount
+        ];
 
-        $slidingCount += $currentSlice > $prevSlice ? 1 : 0;
-    }
-
-    var_dump( [
-        'simple increments' => $incrementCount,
-        'sliding window'    => $slidingCount,
-    ] );
+    };
 

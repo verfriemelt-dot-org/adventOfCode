@@ -4,7 +4,9 @@
 
     namespace year2021\day5;
 
-$input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
+    return;
+    /** @phpstan-ignore-next-line */
+    $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
 
 //    $input = explode( "\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '' );
 
@@ -79,15 +81,12 @@ $input = explode( "\n", file_get_contents( __DIR__ . '/input' ) ?: '' );
             $points = [ $this->from, $this->to ];
 
             for (
-                /** @phpstan-ignore-next-line */
                 $step = min( $this->from->{$direction}, $this->to->{$direction} ) + 1;
-                /** @phpstan-ignore-next-line */
                 $step < max( $this->from->{$direction}, $this->to->{$direction} );
                 $step++
             ) {
                 $point = new Point( $this->from->x, $this->from->y );
 
-                /** @phpstan-ignore-next-line */
                 $point->{$direction} = $step;
                 $points[]            = $point;
             }

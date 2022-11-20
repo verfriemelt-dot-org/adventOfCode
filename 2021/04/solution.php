@@ -6,12 +6,6 @@
 
     use \RuntimeException;
 
-    [$numbers, $fields] = explode( "\n\n", file_get_contents( __DIR__ . '/input' ) ?: '', 2 );
-//    [$numbers, $fields] = explode( "\n\n", file_get_contents( __DIR__ . '/input.simple' ) ?: '', 2 );
-
-    $numbers = array_map( fn( $i ) => (int) $i, explode( ',', $numbers ) );
-    $fields  = explode( "\n\n", $fields );
-
     class Bingo {
 
         /**
@@ -28,7 +22,7 @@
 
             $result = [];
 
-            if ( preg_match_all( '~([0-9]+)~', $input, $result ) !== false ) {
+            if ( preg_match_all( '~([0-9]+)~', $input, $result ) === false ) {
                 throw new RuntimeException( 'illegal input' );
             }
 
@@ -68,7 +62,7 @@
 
                 $line = [];
 
-                for ( $offset = $i; $offset <= count( $this->field ); $offset += $step ) {
+                for ( $offset = $i; $offset < count( $this->field ); $offset += $step ) {
                     $line[] = $this->marked[$offset];
                 }
 
@@ -114,34 +108,53 @@
 
     }
 
-    $bingos = [];
+    return static function(string $input): array {
+        [$numbers, $fields] = explode( "\n\n", $input, 2 );
 
-    // init bingos
-    foreach ( $fields as $field ) {
-        $bingos[] = new Bingo( $field );
-    }
+        $numbers = array_map( fn( $i ) => (int) $i, explode( ',', $numbers ) );
+        $fields  = explode( "\n\n", $fields );
 
-    // go through numbers
-    foreach ( $numbers as $number ) {
+
+
+        $bingos = [];
+
+        // init bingos
+        foreach ( $fields as $field ) {
+            $bingos[] = new Bingo( $field );
+        }
+
+        // go through numbers
+        foreach ( $numbers as $number ) {
 //        print_r( $number . PHP_EOL );
-        foreach ( $bingos as $index => $bingo ) {
+            foreach ( $bingos as $index => $bingo ) {
 
-            $bingo->mark( $number );
+                $bingo->mark( $number );
 
-            if ( $bingo->check() ) {
+                if ( $bingo->check() ) {
 
-                print_r( [
-                    "bingo",
-                    "number" => $number,
-                    "score"  => $bingo->getScore( $number )
-                ] );
+//                    print_r( [
+//                        "bingo",
+//                        "number" => $number,
+//                        "score"  => $bingo->getScore( $number )
+//                    ] );
 
-                $bingo->print();
+//                    $bingo->print();
 
-                // remove board
-                unset( $bingos[$index] );
-                print_r( [ 'board_count' => count( $bingos ) ] );
+                    // remove board
+                    unset( $bingos[$index] );
+//                    print_r( [ 'board_count' => count( $bingos ) ] );
+                    break 2;
+
+                }
             }
         }
-    }
+
+        return [
+            /** @phpstan-ignore-next-line */
+            "part1" => $bingo->getScore($number),
+            "part2" => null,
+        ];
+    };
+
+
 
