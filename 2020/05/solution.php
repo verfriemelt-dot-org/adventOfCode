@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace year2020\day4;
+namespace year2020\day5;
 
 use function array_fill;
 use function array_keys;
