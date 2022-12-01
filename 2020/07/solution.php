@@ -81,7 +81,7 @@ return static function ( string $input ): array {
     return [
         // amount of options without the shiny bag itself
         'part1' => count($options) - 1,
-        'part2' => 1,
+        'part2' => null,
     ];
 };
 

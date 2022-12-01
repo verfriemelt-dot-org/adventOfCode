@@ -9,6 +9,7 @@ parameters:
 
   paths:
     - 2021/
+    - 2022/
 
   ignoreErrors:
     - '#^Short ternary operator is not allowed#'
