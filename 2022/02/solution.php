@@ -2,7 +2,7 @@
 
     declare( strict_types = 1 );
 
-    namespace year2022\day1;
+    namespace year2022\day2;
 
     use function array_slice;
     use function sort;
